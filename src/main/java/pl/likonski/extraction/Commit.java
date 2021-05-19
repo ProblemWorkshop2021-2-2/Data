@@ -5,12 +5,12 @@ public class Commit {
     public String commit_hash;
     public String author_name;
     public String author_email;
-    public String author_timestamp;
+    public int author_timestamp;
     public String committer_name;
     public String committer_email;
-    public String committer_timestamp;
+    public int committer_timestamp;
 
-    public Commit(String tree_hash, String commit_hash, String author_name, String author_email, String author_timestamp, String committer_name, String committer_email, String committer_timestamp) {
+    public Commit(String tree_hash, String commit_hash, String author_name, String author_email, int author_timestamp, String committer_name, String committer_email, int committer_timestamp) {
         this.tree_hash = tree_hash;
         this.commit_hash = commit_hash;
         this.author_name = author_name;
@@ -32,6 +32,6 @@ public class Commit {
                 ", committer_name='" + committer_name + '\'' +
                 ", committer_email='" + committer_email + '\'' +
                 ", committer_timestamp=" + committer_timestamp +
-                '}';
+                '}' + '\n';
     }
 }
