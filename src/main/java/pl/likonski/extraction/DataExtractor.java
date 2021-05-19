@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class DataExtractor {
 
@@ -12,6 +13,8 @@ public class DataExtractor {
     private Contributor[] contributors;
     private Subscriber[] subscribers;
     private User[] users;
+    private ChangedFile[] changedFiles;
+    private int numberOfFiles;
 
     public DataExtractor(String dirPath) {
         this.dirPath = dirPath;
@@ -23,19 +26,14 @@ public class DataExtractor {
             e.printStackTrace();
         }
 
-        System.out.println(Arrays.toString(commits));
-
-
         try {
             contributors = Arrays.stream(readFromFile("contributors.csv", ","))
                     .map(com -> new Contributor(Integer.parseInt(com[0]), com[1], Integer.parseInt(com[2]), com[3],
                     com[4])).toArray(Contributor[]::new);
+
         } catch (NumberFormatException e){
             e.printStackTrace();
         }
-
-        //System.out.println(Arrays.toString(contributors));
-
 
         try {
             subscribers = Arrays.stream(readFromFile("subscribers.csv", ","))
@@ -45,9 +43,6 @@ public class DataExtractor {
             e.printStackTrace();
         }
 
-        //System.out.println(Arrays.toString(subscribers));
-
-
         try {
             users = Arrays.stream(readFromFile("users.csv", "$"))
                     .map(com -> new User(Integer.parseInt(com[0]), com[1], com[2], com[3],
@@ -56,12 +51,21 @@ public class DataExtractor {
             e.printStackTrace();
         }
 
-        //System.out.println(Arrays.toString(users));
+        try {
+            changedFiles = Arrays.stream(readFromFile("changed_files.txt", ","))
+                    .map(com -> new ChangedFile(com[0], com[1])).toArray(ChangedFile[]::new);
+        } catch (NumberFormatException e){
+            e.printStackTrace();
+        }
 
-
+        try {
+            numberOfFiles = Integer.parseInt(Files.readAllLines(Paths.get(dirPath + "files_in_repo.txt")).get(0));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    private String[][] readFromFile(String fileName, String separator){
+    public String[][] readFromFile(String fileName, String separator){
         String[] rows;
         String[][] values = null;
         try {
@@ -73,6 +77,31 @@ public class DataExtractor {
         return values;
     }
 
+    public String getDirPath() {
+        return dirPath;
+    }
 
+    public Commit[] getCommits() {
+        return commits;
+    }
 
+    public Contributor[] getContributors() {
+        return contributors;
+    }
+
+    public Subscriber[] getSubscribers() {
+        return subscribers;
+    }
+
+    public User[] getUsers() {
+        return users;
+    }
+
+    public ChangedFile[] getChangedFiles() {
+        return changedFiles;
+    }
+
+    public int getNumberOfFiles() {
+        return numberOfFiles;
+    }
 }

@@ -10,7 +10,8 @@ public class Commit {
     public String committer_email;
     public int committer_timestamp;
 
-    public Commit(String tree_hash, String commit_hash, String author_name, String author_email, int author_timestamp, String committer_name, String committer_email, int committer_timestamp) {
+    public Commit(String tree_hash, String commit_hash, String author_name, String author_email,
+                  int author_timestamp, String committer_name, String committer_email, int committer_timestamp) {
         this.tree_hash = tree_hash;
         this.commit_hash = commit_hash;
         this.author_name = author_name;

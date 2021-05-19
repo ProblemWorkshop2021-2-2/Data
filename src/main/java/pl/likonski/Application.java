@@ -4,16 +4,13 @@ package pl.likonski;
 import pl.likonski.extraction.DataExtractor;
 
 public class Application {
-    public static String DIR_PATH = ".\\data\\";
 
     public static void main(String[] args) {
 
-        DataExtractor dataExtractor = new DataExtractor(DIR_PATH);
-
-
-
-
-
+        System.out.println("NOD, CD, BFN, TAP");
+        for(String arg : args){
+            System.out.println(new Calculator(new DataExtractor(arg)));
+        }
 
     }
 }

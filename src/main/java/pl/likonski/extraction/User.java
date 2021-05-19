@@ -8,6 +8,7 @@ public class User {
     public String name;
     public String email;
     public String hireable;
+    public boolean isCore = false;
 
     public User(int id, String login, String site_admin, String type, String name, String email, String hireable) {
         this.id = id;
