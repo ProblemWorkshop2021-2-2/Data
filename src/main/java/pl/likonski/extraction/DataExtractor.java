@@ -14,6 +14,7 @@ public class DataExtractor {
     private Subscriber[] subscribers;
     private User[] users;
     private ChangedFile[] changedFiles;
+    private InsertionsCommits[] insertionsCommits;
     private int numberOfFiles;
 
     public DataExtractor(String dirPath) {
@@ -63,6 +64,16 @@ public class DataExtractor {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        try {
+            insertionsCommits = Arrays.stream(readFromFile("insertions_commits.csv", ","))
+                    .map(com -> new InsertionsCommits(com[0], com[1], Integer.parseInt(com[2].trim().split(" ")[0]),
+                            Integer.parseInt(com[3].trim().split(" ")[0]),
+                            Integer.parseInt(com[4].trim().split(" ")[0]))).toArray(InsertionsCommits[]::new);
+
+        } catch (NumberFormatException e){
+            e.printStackTrace();
+        }
     }
 
     public String[][] readFromFile(String fileName, String separator){
@@ -103,5 +114,9 @@ public class DataExtractor {
 
     public int getNumberOfFiles() {
         return numberOfFiles;
+    }
+
+    public InsertionsCommits[] getInsertionsCommits() {
+        return insertionsCommits;
     }
 }
