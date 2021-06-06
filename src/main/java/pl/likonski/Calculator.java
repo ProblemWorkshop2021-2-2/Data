@@ -2,8 +2,16 @@ package pl.likonski;
 
 import pl.likonski.extraction.*;
 
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Calculator {
     DataExtractor dataExtractor;
@@ -16,6 +24,7 @@ public class Calculator {
     private double BFN;
     private double TAP;
     //private double TFC;
+    private HashMap<String, Integer> insertionsMap = new HashMap<>();
 
     public Calculator(DataExtractor dataExtractor) {
         this.dataExtractor = dataExtractor;
@@ -79,7 +88,56 @@ public class Calculator {
 //        });
 //
 //        TFC /= files.size();
+
+        for(InsertionsCommits insertionsCommits : dataExtractor.getInsertionsCommits()){
+            if(insertionsMap.containsKey(insertionsCommits.commith_hash)){
+                insertionsMap.put(insertionsCommits.commith_hash, insertionsMap.get(insertionsCommits.commith_hash)+insertionsCommits.insert);
+            }
+            else{
+                insertionsMap.put(insertionsCommits.commith_hash,insertionsCommits.insert);
+            }
+        }
     }
+
+    public int[] changedLinesCount(){
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Timestamp beginDate = new Timestamp(dataExtractor.getCommits()[dataExtractor.getCommits().length-1].committer_timestamp*1000L);
+        Timestamp endDate = new Timestamp(dataExtractor.getCommits()[0].committer_timestamp*1000L);
+        Long daysAmount = (endDate.getTime()-beginDate.getTime())/(1000*60*60*24);
+        Calendar comparedDate = Calendar.getInstance();
+        comparedDate.setTime(beginDate);
+        int iterator = 0;
+        int[] changedLines = new int[daysAmount.intValue()+10];
+        Arrays.fill(changedLines,0);
+
+        int i = dataExtractor.getCommits().length-1;
+        while(i>=0){
+
+            if(!insertionsMap.containsKey(dataExtractor.getCommits()[i].commit_hash)){
+                i--;
+            }
+            else {
+
+                if (dateFormat.format(dataExtractor.getCommits()[i].committer_timestamp * 1000L)
+                        .equals(dateFormat.format(comparedDate.getTime()))) {
+
+                    changedLines[iterator] += insertionsMap.get(dataExtractor.getCommits()[i].commit_hash);
+                    i--;
+
+                } else {
+                    comparedDate.add(Calendar.DATE, 1);
+                    iterator++;
+                    if (iterator > daysAmount.intValue()+10) {
+                        break;
+                    }
+                }
+            }
+        }
+
+        return changedLines;
+    }
+
 
     @Override
     public String toString() {
