@@ -1,6 +1,6 @@
 package pl.likonski.extraction;
 
-public class Commit {
+public class Commit implements Comparable<Commit>{
     public String tree_hash;
     public String commit_hash;
     public String author_name;
@@ -34,5 +34,14 @@ public class Commit {
                 ", committer_email='" + committer_email + '\'' +
                 ", committer_timestamp=" + committer_timestamp +
                 '}' + '\n';
+    }
+
+    @Override
+    public int compareTo(Commit o) {
+        if(committer_timestamp<o.committer_timestamp)
+            return 1;
+        if(committer_timestamp==o.committer_timestamp)
+            return 0;
+        return -1;
     }
 }
