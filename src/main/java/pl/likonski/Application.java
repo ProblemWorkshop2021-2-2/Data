@@ -22,7 +22,7 @@ public class Application {
 
         try{
             PrintWriter printWriter = new PrintWriter(args[1] + "\\smellsResult.txt");
-            printWriter.println("NOD, CD, BFN, TAP");
+            printWriter.println("NOD, CD, RCD, BFN, TAP, LCP, DC, NR, FN");
             String fullPath = args[0];
 
             File dirPath = new File(fullPath);

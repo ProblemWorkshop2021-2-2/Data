@@ -7,8 +7,8 @@ public class Contributor {
     public String site_admin;
     public String type;
     public boolean isCore = false;
-    public int firstDate = Integer.MAX_VALUE;
-    public int lastDate = -1;
+    //public int firstDate = Integer.MAX_VALUE;
+    //public int lastDate = -1;
 
     public Contributor(int id, String login, int contributions, String site_admin, String type) {
         this.id = id;
